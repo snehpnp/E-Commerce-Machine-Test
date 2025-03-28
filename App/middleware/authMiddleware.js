@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken"); // Import JWT
+const jwt = require("jsonwebtoken"); 
 
 exports.authMiddleware = (req, res, next) => {
     const authHeader = req.header("Authorization");
@@ -6,16 +6,16 @@ exports.authMiddleware = (req, res, next) => {
         return res.status(401).json({ status: false, message: "Access denied. No token provided.", data: [] });
     }
 
-    const token = authHeader.split(" ")[1]; // Extract token after 'Bearer'
+    const token = authHeader.split(" ")[1]; 
 
     try {
-        const decoded = jwt.verify(token, "asdfghjkl"); // Make sure secret key is correct
-        console.log("Decoded Token:", decoded); // Debugging
+        const decoded = jwt.verify(token, "asdfghjkl"); 
+        console.log("Decoded Token:", decoded); 
 
-        req.user = decoded; // Attach decoded token to req.user
+        req.user = decoded; 
         next();
     } catch (error) {
-        console.error("Token verification error:", error.message); // Debugging
+        console.error("Token verification error:", error.message); 
         return res.status(400).json({ status: false, message: "Invalid token.", data: [] });
     }
 };

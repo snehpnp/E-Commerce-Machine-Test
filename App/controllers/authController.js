@@ -37,7 +37,6 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     try {
-        // Validate input
         await body("email").isEmail().withMessage("Invalid email format").run(req);
         await body("password").notEmpty().withMessage("Password is required").run(req);
         
@@ -48,15 +47,12 @@ exports.login = async (req, res) => {
 
         const { email, password } = req.body;
 
-        // Check if user exists
         let user = await User.findOne({ email });
         if (!user) return res.status(400).json({ status: false, message: "Invalid credentials", data: [] });
 
-        // Validate password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ status: false, message: "Invalid credentials", data: [] });
 
-        // Generate JWT
         const token = jwt.sign(
             { userId: user._id, role: user.role },
             "asdfghjkl",
